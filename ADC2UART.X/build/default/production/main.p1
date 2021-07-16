@@ -34,6 +34,17 @@ Version 4.0 HI-TECH Software Intermediate Code
 "1017
 [; ;C:\Program Files (x86)\Microchip\xc8\v2.00\pic\include\pic12f1840.h: 1017: extern volatile TRISAbits_t TRISAbits __attribute__((address(0x08C)));
 [v _TRISAbits `VS64 ~T0 @X0 0 e@140 ]
+"1738
+[; ;C:\Program Files (x86)\Microchip\xc8\v2.00\pic\include\pic12f1840.h: 1738:     struct {
+[s S98 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
+[n S98 . LATA0 LATA1 LATA2 . LATA4 LATA5 ]
+"1737
+[; ;C:\Program Files (x86)\Microchip\xc8\v2.00\pic\include\pic12f1840.h: 1737: typedef union {
+[u S97 `S98 1 ]
+[n S97 . . ]
+"1747
+[; ;C:\Program Files (x86)\Microchip\xc8\v2.00\pic\include\pic12f1840.h: 1747: extern volatile LATAbits_t LATAbits __attribute__((address(0x10C)));
+[v _LATAbits `VS97 ~T0 @X0 0 e@268 ]
 "2871
 [; ;C:\Program Files (x86)\Microchip\xc8\v2.00\pic\include\pic12f1840.h: 2871: extern volatile unsigned char TXSTA __attribute__((address(0x19E)));
 [v _TXSTA `Vuc ~T0 @X0 0 e@414 ]
@@ -626,71 +637,77 @@ Version 4.0 HI-TECH Software Intermediate Code
 [; ;main.c: 53:     TRISAbits.TRISA0 = 0;
 [e = . . _TRISAbits 0 0 -> -> 0 `i `uc ]
 "55
-[; ;main.c: 55:     TXSTA = 0x84;
-[e = _TXSTA -> -> 132 `i `uc ]
+[; ;main.c: 55:     LATAbits.LATA5 = 1;
+[e = . . _LATAbits 0 5 -> -> 1 `i `uc ]
 "56
-[; ;main.c: 56:     RCSTA = 0x80;
-[e = _RCSTA -> -> 128 `i `uc ]
-"57
-[; ;main.c: 57:     BAUDCON = 0x00;
-[e = _BAUDCON -> -> 0 `i `uc ]
+[; ;main.c: 56:     TRISAbits.TRISA5 = 0;
+[e = . . _TRISAbits 0 5 -> -> 0 `i `uc ]
+"58
+[; ;main.c: 58:     TXSTA = 0x84;
+[e = _TXSTA -> -> 132 `i `uc ]
 "59
-[; ;main.c: 59:     TXSTAbits.BRGH = 1;
-[e = . . _TXSTAbits 0 2 -> -> 1 `i `uc ]
+[; ;main.c: 59:     RCSTA = 0x80;
+[e = _RCSTA -> -> 128 `i `uc ]
 "60
-[; ;main.c: 60:     BAUDCONbits.BRG16 = 1;
-[e = . . _BAUDCONbits 0 3 -> -> 1 `i `uc ]
+[; ;main.c: 60:     BAUDCON = 0x00;
+[e = _BAUDCON -> -> 0 `i `uc ]
 "62
-[; ;main.c: 62:     SPBRG = 0x67;
+[; ;main.c: 62:     TXSTAbits.BRGH = 1;
+[e = . . _TXSTAbits 0 2 -> -> 1 `i `uc ]
+"63
+[; ;main.c: 63:     BAUDCONbits.BRG16 = 1;
+[e = . . _BAUDCONbits 0 3 -> -> 1 `i `uc ]
+"65
+[; ;main.c: 65:     SPBRG = 0x67;
 [e = _SPBRG -> -> 103 `i `uc ]
-"64
-[; ;main.c: 64:     TXSTAbits.TXEN = 1;
-[e = . . _TXSTAbits 0 5 -> -> 1 `i `uc ]
 "67
-[; ;main.c: 67:     OPTION_REGbits.TMR0CS = 0;
+[; ;main.c: 67:     TXSTAbits.TXEN = 1;
+[e = . . _TXSTAbits 0 5 -> -> 1 `i `uc ]
+"70
+[; ;main.c: 70:     OPTION_REGbits.TMR0CS = 0;
 [e = . . _OPTION_REGbits 0 5 -> -> 0 `i `uc ]
-"68
-[; ;main.c: 68:     OPTION_REGbits.PSA = 0;
+"71
+[; ;main.c: 71:     OPTION_REGbits.PSA = 0;
 [e = . . _OPTION_REGbits 0 3 -> -> 0 `i `uc ]
-"69
-[; ;main.c: 69:     OPTION_REGbits.PS = 0x2;
-[e = . . _OPTION_REGbits 1 0 -> -> 2 `i `uc ]
 "72
-[; ;main.c: 72:     ADCON0 = 0x00;
-[e = _ADCON0 -> -> 0 `i `uc ]
-"73
-[; ;main.c: 73:     ADCON1 = (0x80 | 0x03);
-[e = _ADCON1 -> | -> 128 `i -> 3 `i `uc ]
-"74
-[; ;main.c: 74:     ADCON1bits.ADCS = 0x05;
-[e = . . _ADCON1bits 1 2 -> -> 5 `i `uc ]
+[; ;main.c: 72:     OPTION_REGbits.PS = 0x2;
+[e = . . _OPTION_REGbits 1 0 -> -> 2 `i `uc ]
 "75
-[; ;main.c: 75:     ADCON0bits.ADON = 1;
-[e = . . _ADCON0bits 0 0 -> -> 1 `i `uc ]
+[; ;main.c: 75:     ADCON0 = 0x00;
+[e = _ADCON0 -> -> 0 `i `uc ]
+"76
+[; ;main.c: 76:     ADCON1 = (0x80 | 0x03);
+[e = _ADCON1 -> | -> 128 `i -> 3 `i `uc ]
 "77
-[; ;main.c: 77:     FVRCON = 0xF0;
-[e = _FVRCON -> -> 240 `i `uc ]
+[; ;main.c: 77:     ADCON1bits.ADCS = 0x05;
+[e = . . _ADCON1bits 1 2 -> -> 5 `i `uc ]
 "78
-[; ;main.c: 78:     delay(10);
-[e ( _delay (1 -> -> 10 `i `us ]
+[; ;main.c: 78:     ADCON0bits.ADON = 1;
+[e = . . _ADCON0bits 0 0 -> -> 1 `i `uc ]
 "80
-[; ;main.c: 80:     while (1) {
+[; ;main.c: 80:     FVRCON = 0xF0;
+[e = _FVRCON -> -> 240 `i `uc ]
+"81
+[; ;main.c: 81:     delay(10);
+[e ( _delay (1 -> -> 10 `i `us ]
+"83
+[; ;main.c: 83:     while (1) {
 [e :U 272 ]
 {
-"82
-[; ;main.c: 82:         FVRCONbits.ADFVR = 0x01;;
-[e = . . _FVRCONbits 1 0 -> -> 1 `i `uc ]
-"83
-[; ;main.c: 83:         ADCON0bits.CHS = 0x03;
-[e = . . _ADCON0bits 1 2 -> -> 3 `i `uc ]
-"84
-[; ;main.c: 84:         delay(1);
-[e ( _delay (1 -> -> 1 `i `us ]
 "85
-[; ;main.c: 85:         ADCON0bits.ADGO = 1;
-[e = . . _ADCON0bits 1 1 -> -> 1 `i `uc ]
+[; ;main.c: 85:         FVRCONbits.ADFVR = 0x01;;
+[e = . . _FVRCONbits 1 0 -> -> 1 `i `uc ]
 "86
-[; ;main.c: 86:         while (ADCON0bits.ADGO == 1) {}
+[; ;main.c: 86:         ADCON0bits.CHS = 0x03;
+[e = . . _ADCON0bits 1 2 -> -> 3 `i `uc ]
+"87
+[; ;main.c: 87:         delay(1);
+[e ( _delay (1 -> -> 1 `i `us ]
+"88
+[; ;main.c: 88:         ADCON0bits.ADGO = 1;
+[e = . . _ADCON0bits 1 1 -> -> 1 `i `uc ]
+"89
+[; ;main.c: 89:         while (ADCON0bits.ADGO == 1) {}
 [e $U 274  ]
 [e :U 275 ]
 {
@@ -698,26 +715,26 @@ Version 4.0 HI-TECH Software Intermediate Code
 [e :U 274 ]
 [e $ == -> . . _ADCON0bits 1 1 `i -> 1 `i 275  ]
 [e :U 276 ]
-"87
-[; ;main.c: 87:         adc_ch1_val_msb = ADRESH;
-[e = _adc_ch1_val_msb _ADRESH ]
-"88
-[; ;main.c: 88:         adc_ch1_val_lsb = ADRESL;
-[e = _adc_ch1_val_lsb _ADRESL ]
 "90
-[; ;main.c: 90:         FVRCONbits.ADFVR = 0x02;;
-[e = . . _FVRCONbits 1 0 -> -> 2 `i `uc ]
+[; ;main.c: 90:         adc_ch1_val_msb = ADRESH;
+[e = _adc_ch1_val_msb _ADRESH ]
 "91
-[; ;main.c: 91:         ADCON0bits.CHS = 0x02;
-[e = . . _ADCON0bits 1 2 -> -> 2 `i `uc ]
-"92
-[; ;main.c: 92:         delay(1);
-[e ( _delay (1 -> -> 1 `i `us ]
+[; ;main.c: 91:         adc_ch1_val_lsb = ADRESL;
+[e = _adc_ch1_val_lsb _ADRESL ]
 "93
-[; ;main.c: 93:         ADCON0bits.ADGO = 1;
-[e = . . _ADCON0bits 1 1 -> -> 1 `i `uc ]
+[; ;main.c: 93:         FVRCONbits.ADFVR = 0x02;;
+[e = . . _FVRCONbits 1 0 -> -> 2 `i `uc ]
 "94
-[; ;main.c: 94:         while (ADCON0bits.ADGO == 1) {}
+[; ;main.c: 94:         ADCON0bits.CHS = 0x02;
+[e = . . _ADCON0bits 1 2 -> -> 2 `i `uc ]
+"95
+[; ;main.c: 95:         delay(1);
+[e ( _delay (1 -> -> 1 `i `us ]
+"96
+[; ;main.c: 96:         ADCON0bits.ADGO = 1;
+[e = . . _ADCON0bits 1 1 -> -> 1 `i `uc ]
+"97
+[; ;main.c: 97:         while (ADCON0bits.ADGO == 1) {}
 [e $U 277  ]
 [e :U 278 ]
 {
@@ -725,69 +742,78 @@ Version 4.0 HI-TECH Software Intermediate Code
 [e :U 277 ]
 [e $ == -> . . _ADCON0bits 1 1 `i -> 1 `i 278  ]
 [e :U 279 ]
-"95
-[; ;main.c: 95:         adc_ch2_val_msb = ADRESH;
+"98
+[; ;main.c: 98:         adc_ch2_val_msb = ADRESH;
 [e = _adc_ch2_val_msb _ADRESH ]
-"96
-[; ;main.c: 96:         adc_ch2_val_lsb = ADRESL;
+"99
+[; ;main.c: 99:         adc_ch2_val_lsb = ADRESL;
 [e = _adc_ch2_val_lsb _ADRESL ]
-"107
-[; ;main.c: 107:         UART_send_char('@');
+"110
+[; ;main.c: 110:         UART_send_char('@');
 [e ( _UART_send_char (1 -> -> 64 `ui `uc ]
-"114
-[; ;main.c: 114:         UART_send_char(' ');
+"111
+[; ;main.c: 111:         UART_send_char('S');
+[e ( _UART_send_char (1 -> -> 83 `ui `uc ]
+"112
+[; ;main.c: 112:         UART_send_char('P');
+[e ( _UART_send_char (1 -> -> 80 `ui `uc ]
+"113
+[; ;main.c: 113:         UART_send_char('S');
+[e ( _UART_send_char (1 -> -> 83 `ui `uc ]
+"120
+[; ;main.c: 120:         UART_send_char(' ');
 [e ( _UART_send_char (1 -> -> 32 `ui `uc ]
-"115
-[; ;main.c: 115:         UART_send_uint16_4dec(adc_ch1_val_msb * 256 + adc_ch1_val_lsb);
+"121
+[; ;main.c: 121:         UART_send_uint16_4dec(adc_ch1_val_msb * 256 + adc_ch1_val_lsb);
 [e ( _UART_send_uint16_4dec (1 -> + * -> _adc_ch1_val_msb `i -> 256 `i -> _adc_ch1_val_lsb `i `us ]
-"116
-[; ;main.c: 116:         UART_send_char(' ');
+"122
+[; ;main.c: 122:         UART_send_char(' ');
 [e ( _UART_send_char (1 -> -> 32 `ui `uc ]
-"117
-[; ;main.c: 117:         UART_send_uint16_4dec((adc_ch2_val_msb * 256 + adc_ch2_val_lsb)*2);
+"123
+[; ;main.c: 123:         UART_send_uint16_4dec((adc_ch2_val_msb * 256 + adc_ch2_val_lsb)*2);
 [e ( _UART_send_uint16_4dec (1 -> * + * -> _adc_ch2_val_msb `i -> 256 `i -> _adc_ch2_val_lsb `i -> 2 `i `us ]
-"124
-[; ;main.c: 124:         UART_send_char(0x0D);
+"130
+[; ;main.c: 130:         UART_send_char(0x0D);
 [e ( _UART_send_char (1 -> -> 13 `i `uc ]
-"125
-[; ;main.c: 125:         UART_send_char(0x0A);
+"131
+[; ;main.c: 131:         UART_send_char(0x0A);
 [e ( _UART_send_char (1 -> -> 10 `i `uc ]
-"127
-[; ;main.c: 127:         delay(1000);
+"133
+[; ;main.c: 133:         delay(1000);
 [e ( _delay (1 -> -> 1000 `i `us ]
-"129
-[; ;main.c: 129:     }
+"135
+[; ;main.c: 135:     }
 }
 [e :U 271 ]
 [e $U 272  ]
 [e :U 273 ]
-"130
-[; ;main.c: 130: }
+"136
+[; ;main.c: 136: }
 [e :UE 267 ]
 }
-"132
-[; ;main.c: 132: void delay(uint16_t ms) {
+"138
+[; ;main.c: 138: void delay(uint16_t ms) {
 [v _delay `(v ~T0 @X0 1 ef1`us ]
 {
 [e :U _delay ]
 [v _ms `us ~T0 @X0 1 r1 ]
 [f ]
-"134
-[; ;main.c: 134:     while (ms != 0) {
+"140
+[; ;main.c: 140:     while (ms != 0) {
 [e $U 281  ]
 [e :U 282 ]
 {
-"135
-[; ;main.c: 135:         INTCONbits.TMR0IF = 0;
+"141
+[; ;main.c: 141:         INTCONbits.TMR0IF = 0;
 [e = . . _INTCONbits 0 2 -> -> 0 `i `uc ]
-"136
-[; ;main.c: 136:         TMR0 = 0x05;
+"142
+[; ;main.c: 142:         TMR0 = 0x05;
 [e = _TMR0 -> -> 5 `i `uc ]
-"137
-[; ;main.c: 137:         __asm("NOP");
+"143
+[; ;main.c: 143:         __asm("NOP");
 [; <" NOP ;# ">
-"138
-[; ;main.c: 138:         while (INTCONbits.TMR0IF == 0) {}
+"144
+[; ;main.c: 144:         while (INTCONbits.TMR0IF == 0) {}
 [e $U 284  ]
 [e :U 285 ]
 {
@@ -795,36 +821,36 @@ Version 4.0 HI-TECH Software Intermediate Code
 [e :U 284 ]
 [e $ == -> . . _INTCONbits 0 2 `i -> 0 `i 285  ]
 [e :U 286 ]
-"139
-[; ;main.c: 139:         ms--;
+"145
+[; ;main.c: 145:         ms--;
 [e -- _ms -> -> 1 `i `us ]
-"140
-[; ;main.c: 140:     }
+"146
+[; ;main.c: 146:     }
 }
 [e :U 281 ]
-"134
-[; ;main.c: 134:     while (ms != 0) {
+"140
+[; ;main.c: 140:     while (ms != 0) {
 [e $ != -> _ms `ui -> -> 0 `i `ui 282  ]
 [e :U 283 ]
-"141
-[; ;main.c: 141: }
+"147
+[; ;main.c: 147: }
 [e :UE 280 ]
 }
-"143
-[; ;main.c: 143: void UART_send_char(uint8_t data) {
+"149
+[; ;main.c: 149: void UART_send_char(uint8_t data) {
 [v _UART_send_char `(v ~T0 @X0 1 ef1`uc ]
 {
 [e :U _UART_send_char ]
 [v _data `uc ~T0 @X0 1 r1 ]
 [f ]
-"144
-[; ;main.c: 144:     TXREG = data;
+"150
+[; ;main.c: 150:     TXREG = data;
 [e = _TXREG _data ]
-"145
-[; ;main.c: 145:     __asm("NOP");
+"151
+[; ;main.c: 151:     __asm("NOP");
 [; <" NOP ;# ">
-"146
-[; ;main.c: 146:     while (TXSTAbits.TRMT == 0) { };
+"152
+[; ;main.c: 152:     while (TXSTAbits.TRMT == 0) { };
 [e $U 288  ]
 [e :U 289 ]
 {
@@ -832,93 +858,93 @@ Version 4.0 HI-TECH Software Intermediate Code
 [e :U 288 ]
 [e $ == -> . . _TXSTAbits 0 1 `i -> 0 `i 289  ]
 [e :U 290 ]
-"147
-[; ;main.c: 147: }
+"153
+[; ;main.c: 153: }
 [e :UE 287 ]
 }
-"149
-[; ;main.c: 149: void UART_send_nah(uint8_t nibble) {
+"155
+[; ;main.c: 155: void UART_send_nah(uint8_t nibble) {
 [v _UART_send_nah `(v ~T0 @X0 1 ef1`uc ]
 {
 [e :U _UART_send_nah ]
 [v _nibble `uc ~T0 @X0 1 r1 ]
 [f ]
-"150
-[; ;main.c: 150:     nibble &= 0x0F;
+"156
+[; ;main.c: 156:     nibble &= 0x0F;
 [e =& _nibble -> -> 15 `i `uc ]
-"151
-[; ;main.c: 151:     if (nibble < 10) UART_send_char(nibble + 0x30);
+"157
+[; ;main.c: 157:     if (nibble < 10) UART_send_char(nibble + 0x30);
 [e $ ! < -> _nibble `i -> 10 `i 292  ]
 [e ( _UART_send_char (1 -> + -> _nibble `i -> 48 `i `uc ]
 [e $U 293  ]
-"152
-[; ;main.c: 152:     else UART_send_char(nibble + 0x37);
+"158
+[; ;main.c: 158:     else UART_send_char(nibble + 0x37);
 [e :U 292 ]
 [e ( _UART_send_char (1 -> + -> _nibble `i -> 55 `i `uc ]
 [e :U 293 ]
-"153
-[; ;main.c: 153: }
+"159
+[; ;main.c: 159: }
 [e :UE 291 ]
 }
-"155
-[; ;main.c: 155: void UART_send_2nah(uint8_t byte) {
+"161
+[; ;main.c: 161: void UART_send_2nah(uint8_t byte) {
 [v _UART_send_2nah `(v ~T0 @X0 1 ef1`uc ]
 {
 [e :U _UART_send_2nah ]
 [v _byte `uc ~T0 @X0 1 r1 ]
 [f ]
-"158
-[; ;main.c: 158:     UART_send_nah(byte >> 4);
+"164
+[; ;main.c: 164:     UART_send_nah(byte >> 4);
 [e ( _UART_send_nah (1 -> >> -> _byte `i -> 4 `i `uc ]
-"159
-[; ;main.c: 159:     UART_send_nah(byte);
+"165
+[; ;main.c: 165:     UART_send_nah(byte);
 [e ( _UART_send_nah (1 _byte ]
-"160
-[; ;main.c: 160: }
+"166
+[; ;main.c: 166: }
 [e :UE 294 ]
 }
-"162
-[; ;main.c: 162: void UART_send_uint16_4dec(uint16_t val) {
+"168
+[; ;main.c: 168: void UART_send_uint16_4dec(uint16_t val) {
 [v _UART_send_uint16_4dec `(v ~T0 @X0 1 ef1`us ]
 {
 [e :U _UART_send_uint16_4dec ]
 [v _val `us ~T0 @X0 1 r1 ]
 [f ]
-"163
-[; ;main.c: 163:     uint8_t toSend = val / 1000;
+"169
+[; ;main.c: 169:     uint8_t toSend = val / 1000;
 [v _toSend `uc ~T0 @X0 1 a ]
 [e = _toSend -> / -> _val `ui -> -> 1000 `i `ui `uc ]
-"164
-[; ;main.c: 164:     val = val % 1000;
-[e = _val -> % -> _val `ui -> -> 1000 `i `ui `us ]
-"165
-[; ;main.c: 165:     UART_send_char(toSend + 0x30);
-[e ( _UART_send_char (1 -> + -> _toSend `i -> 48 `i `uc ]
-"166
-[; ;main.c: 166:     toSend = val / 100;
-[e = _toSend -> / -> _val `ui -> -> 100 `i `ui `uc ]
-"167
-[; ;main.c: 167:     val = val % 100;
-[e = _val -> % -> _val `ui -> -> 100 `i `ui `us ]
-"168
-[; ;main.c: 168:     UART_send_char(toSend + 0x30);
-[e ( _UART_send_char (1 -> + -> _toSend `i -> 48 `i `uc ]
-"169
-[; ;main.c: 169:     toSend = val / 10;
-[e = _toSend -> / -> _val `ui -> -> 10 `i `ui `uc ]
 "170
-[; ;main.c: 170:     val = val % 10;
-[e = _val -> % -> _val `ui -> -> 10 `i `ui `us ]
+[; ;main.c: 170:     val = val % 1000;
+[e = _val -> % -> _val `ui -> -> 1000 `i `ui `us ]
 "171
 [; ;main.c: 171:     UART_send_char(toSend + 0x30);
 [e ( _UART_send_char (1 -> + -> _toSend `i -> 48 `i `uc ]
 "172
-[; ;main.c: 172:     toSend = val;
-[e = _toSend -> _val `uc ]
+[; ;main.c: 172:     toSend = val / 100;
+[e = _toSend -> / -> _val `ui -> -> 100 `i `ui `uc ]
 "173
-[; ;main.c: 173:     UART_send_char(toSend + 0x30);
-[e ( _UART_send_char (1 -> + -> _toSend `i -> 48 `i `uc ]
+[; ;main.c: 173:     val = val % 100;
+[e = _val -> % -> _val `ui -> -> 100 `i `ui `us ]
 "174
-[; ;main.c: 174: }
+[; ;main.c: 174:     UART_send_char(toSend + 0x30);
+[e ( _UART_send_char (1 -> + -> _toSend `i -> 48 `i `uc ]
+"175
+[; ;main.c: 175:     toSend = val / 10;
+[e = _toSend -> / -> _val `ui -> -> 10 `i `ui `uc ]
+"176
+[; ;main.c: 176:     val = val % 10;
+[e = _val -> % -> _val `ui -> -> 10 `i `ui `us ]
+"177
+[; ;main.c: 177:     UART_send_char(toSend + 0x30);
+[e ( _UART_send_char (1 -> + -> _toSend `i -> 48 `i `uc ]
+"178
+[; ;main.c: 178:     toSend = val;
+[e = _toSend -> _val `uc ]
+"179
+[; ;main.c: 179:     UART_send_char(toSend + 0x30);
+[e ( _UART_send_char (1 -> + -> _toSend `i -> 48 `i `uc ]
+"180
+[; ;main.c: 180: }
 [e :UE 295 ]
 }

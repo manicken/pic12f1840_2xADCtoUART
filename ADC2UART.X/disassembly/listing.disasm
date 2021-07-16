@@ -1,7 +1,7 @@
 Disassembly Listing for ADC2UART
 Generated From:
 G:/_githubClones/waterPressureADC2UART/ADC2UART.X/dist/default/production/ADC2UART.X.production.elf
-2021-jul-08 15:35:47
+2021-jul-13 14:05:35
 
 ---  G:/_githubClones/waterPressureADC2UART/ADC2UART.X/main.c  ------------------------------------------
 1:             // CONFIG1
@@ -51,208 +51,215 @@ G:/_githubClones/waterPressureADC2UART/ADC2UART.X/dist/default/production/ADC2UA
 45:            
 46:            void main() {
 47:                OSCCON = 0x73; // PLL off, 8MHz int osc
-073E  3073     MOVLW 0x73
-073F  0021     MOVLB 0x1
-0740  0099     MOVWF OSCCON
+073A  3073     MOVLW 0x73
+073B  0021     MOVLB 0x1
+073C  0099     MOVWF OSCCON
 48:                while (OSCSTATbits.HFIOFS == 0) {}
-0741  2F42     GOTO 0x742
-0742  1C1A     BTFSS OSCSTAT, 0x0
-0743  2F45     GOTO 0x745
-0744  2F46     GOTO 0x746
-0745  2F42     GOTO 0x742
-0746  2F47     GOTO 0x747
+073D  2F3E     GOTO 0x73E
+073E  1C1A     BTFSS OSCSTAT, 0x0
+073F  2F41     GOTO 0x741
+0740  2F42     GOTO 0x742
+0741  2F3E     GOTO 0x73E
+0742  2F43     GOTO 0x743
 49:                
 50:                PORTA = 0x00;
-0747  0020     MOVLB 0x0
-0748  018C     CLRF PORTA
+0743  0020     MOVLB 0x0
+0744  018C     CLRF PORTA
 51:                LATA = 0x00;
-0749  0022     MOVLB 0x2
-074A  018C     CLRF LATA
+0745  0022     MOVLB 0x2
+0746  018C     CLRF LATA
 52:                TRISA = 0xFF;
-074B  30FF     MOVLW 0xFF
-074C  0021     MOVLB 0x1
-074D  008C     MOVWF TRISA
+0747  30FF     MOVLW 0xFF
+0748  0021     MOVLB 0x1
+0749  008C     MOVWF TRISA
 53:                TRISAbits.TRISA0 = 0; // UART TX pin
-074E  100C     BCF TRISA, 0x0
+074A  100C     BCF TRISA, 0x0
 54:                
-55:                TXSTA = 0x84;
+55:                LATAbits.LATA5 = 1; // MAX487 transmit mode
+074B  0022     MOVLB 0x2
+074C  168C     BSF LATA, 0x5
+56:                TRISAbits.TRISA5 = 0; // MAX487 mode pin as output
+074D  0021     MOVLB 0x1
+074E  128C     BCF TRISA, 0x5
+57:                
+58:                TXSTA = 0x84;
 074F  3084     MOVLW 0x84
 0750  0023     MOVLB 0x3
 0751  009E     MOVWF TXSTA
-56:                RCSTA = 0x80;
+59:                RCSTA = 0x80;
 0752  3080     MOVLW 0x80
 0753  009D     MOVWF RCSTA
-57:                BAUDCON = 0x00;
+60:                BAUDCON = 0x00;
 0754  019F     CLRF BAUDCON
-58:                
-59:                TXSTAbits.BRGH = 1;
-0755  151E     BSF TXSTA, 0x2
-60:                BAUDCONbits.BRG16 = 1;
-0756  159F     BSF BAUDCON, 0x3
 61:                
-62:                SPBRG = 0x67; // 103dec
+62:                TXSTAbits.BRGH = 1;
+0755  151E     BSF TXSTA, 0x2
+63:                BAUDCONbits.BRG16 = 1;
+0756  159F     BSF BAUDCON, 0x3
+64:                
+65:                SPBRG = 0x67; // 103dec
 0757  3067     MOVLW 0x67
 0758  009B     MOVWF SP1BRG
-63:                
-64:                TXSTAbits.TXEN = 1;
+66:                
+67:                TXSTAbits.TXEN = 1;
 0759  169E     BSF TXSTA, 0x5
-65:                
-66:                // setup 1mS delay timer
-67:                OPTION_REGbits.TMR0CS = 0; //internal instruction cycle clock
+68:                
+69:                // setup 1mS delay timer
+70:                OPTION_REGbits.TMR0CS = 0; //internal instruction cycle clock
 075A  0021     MOVLB 0x1
 075B  1295     BCF OPTION_REG, 0x5
-68:                OPTION_REGbits.PSA = 0; //prescaler is to timer 0 module
+71:                OPTION_REGbits.PSA = 0; //prescaler is to timer 0 module
 075C  1195     BCF OPTION_REG, 0x3
-69:                OPTION_REGbits.PS = 0x2; // prescaler is 8 which gives @ 250 timer clocks => 1mS
+72:                OPTION_REGbits.PS = 0x2; // prescaler is 8 which gives @ 250 timer clocks => 1mS
 075D  0815     MOVF OPTION_REG, W
 075E  39F8     ANDLW 0xF8
 075F  3802     IORLW 0x2
 0760  0095     MOVWF OPTION_REG
-70:                
-71:                // setup ADC
-72:                ADCON0 = 0x00; // reset and disable ADC
+73:                
+74:                // setup ADC
+75:                ADCON0 = 0x00; // reset and disable ADC
 0761  019D     CLRF ADCON0
-73:                ADCON1 = (0x80 | 0x03); // size most significant bits of ADRESH are set to '0', VREF -> internal FVR
+76:                ADCON1 = (0x80 | 0x03); // size most significant bits of ADRESH are set to '0', VREF -> internal FVR
 0762  3083     MOVLW 0x83
 0763  009E     MOVWF ADCON1
-74:                ADCON1bits.ADCS = 0x05; // Fosc/16
+77:                ADCON1bits.ADCS = 0x05; // Fosc/16
 0764  081E     MOVF ADCON1, W
 0765  398F     ANDLW 0x8F
 0766  3850     IORLW 0x50
 0767  009E     MOVWF ADCON1
-75:                ADCON0bits.ADON = 1;
+78:                ADCON0bits.ADON = 1;
 0768  141D     BSF ADCON0, 0x0
-76:                
-77:                FVRCON = 0xF0; // FVR enabled, temperature indicator enabled low range, both VREF outputs off
+79:                
+80:                FVRCON = 0xF0; // FVR enabled, temperature indicator enabled low range, both VREF outputs off
 0769  30F0     MOVLW 0xF0
 076A  0022     MOVLB 0x2
 076B  0097     MOVWF FVRCON
-78:                delay(10); // 10mS
+81:                delay(10); // 10mS
 076C  300A     MOVLW 0xA
 076D  00F0     MOVWF 0x170
 076E  3000     MOVLW 0x0
 076F  00F1     MOVWF 0x171
 0770  3186     MOVLP 0x6
-0771  2634     CALL 0x634
+0771  2630     CALL 0x630
 0772  3187     MOVLP 0x7
 0773  2F74     GOTO 0x774
-79:                
-80:                while (1) {
-81:                    
-82:                    FVRCONbits.ADFVR = ADC_CH1_VREF;
+82:                
+83:                while (1) {
+84:                    
+85:                    FVRCONbits.ADFVR = ADC_CH1_VREF;
 0774  0022     MOVLB 0x2
 0775  0817     MOVF FVRCON, W
 0776  39FC     ANDLW 0xFC
 0777  3801     IORLW 0x1
 0778  0097     MOVWF FVRCON
-83:                    ADCON0bits.CHS = ADC_CH1;
+86:                    ADCON0bits.CHS = ADC_CH1;
 0779  0021     MOVLB 0x1
 077A  081D     MOVF ADCON0, W
 077B  3983     ANDLW 0x83
 077C  380C     IORLW 0xC
 077D  009D     MOVWF ADCON0
-84:                    delay(1); // 1mS
+87:                    delay(1); // 1mS
 077E  3001     MOVLW 0x1
 077F  00F0     MOVWF 0xF0
 0780  3000     MOVLW 0x0
 0781  00F1     MOVWF 0xF1
 0782  3186     MOVLP 0x6
-0783  2634     CALL 0x634
+0783  2630     CALL 0x630
 0784  3187     MOVLP 0x7
-85:                    ADCON0bits.ADGO = 1; // starts conversion
+88:                    ADCON0bits.ADGO = 1; // starts conversion
 0785  0021     MOVLB 0x1
 0786  149D     BSF ADCON0, 0x1
-86:                    while (ADCON0bits.ADGO == 1) {} // wait for conversion to complete
+89:                    while (ADCON0bits.ADGO == 1) {} // wait for conversion to complete
 0787  2F88     GOTO 0x788
 0788  189D     BTFSC ADCON0, 0x1
 0789  2F8B     GOTO 0x78B
 078A  2F8C     GOTO 0x78C
 078B  2F88     GOTO 0x788
 078C  2F8D     GOTO 0x78D
-87:                    adc_ch1_val_msb = ADRESH;
+90:                    adc_ch1_val_msb = ADRESH;
 078D  081C     MOVF ADRESH, W
 078E  0020     MOVLB 0x0
 078F  00A0     MOVWF __pcstackBANK0
 0790  0820     MOVF __pcstackBANK0, W
 0791  00FD     MOVWF adc_ch1_val_msb
-88:                    adc_ch1_val_lsb = ADRESL;
+91:                    adc_ch1_val_lsb = ADRESL;
 0792  0021     MOVLB 0x1
 0793  081B     MOVF ADRES, W
 0794  0020     MOVLB 0x0
 0795  00A0     MOVWF __pcstackBANK0
 0796  0820     MOVF __pcstackBANK0, W
 0797  00FC     MOVWF adc_ch1_val_lsb
-89:                    
-90:                    FVRCONbits.ADFVR = ADC_CH2_VREF;
+92:                    
+93:                    FVRCONbits.ADFVR = ADC_CH2_VREF;
 0798  0022     MOVLB 0x2
 0799  0817     MOVF FVRCON, W
 079A  39FC     ANDLW 0xFC
 079B  3802     IORLW 0x2
 079C  0097     MOVWF FVRCON
-91:                    ADCON0bits.CHS = ADC_CH2;
+94:                    ADCON0bits.CHS = ADC_CH2;
 079D  0021     MOVLB 0x1
 079E  081D     MOVF ADCON0, W
 079F  3983     ANDLW 0x83
 07A0  3808     IORLW 0x8
 07A1  009D     MOVWF ADCON0
-92:                    delay(1); // 1mS
+95:                    delay(1); // 1mS
 07A2  3001     MOVLW 0x1
 07A3  00F0     MOVWF 0xF0
 07A4  3000     MOVLW 0x0
 07A5  00F1     MOVWF 0xF1
 07A6  3186     MOVLP 0x6
-07A7  2634     CALL 0x634
+07A7  2630     CALL 0x630
 07A8  3187     MOVLP 0x7
-93:                    ADCON0bits.ADGO = 1; // starts conversion
+96:                    ADCON0bits.ADGO = 1; // starts conversion
 07A9  0021     MOVLB 0x1
 07AA  149D     BSF ADCON0, 0x1
-94:                    while (ADCON0bits.ADGO == 1) {} // wait for conversion to complete
+97:                    while (ADCON0bits.ADGO == 1) {} // wait for conversion to complete
 07AB  2FAC     GOTO 0x7AC
 07AC  189D     BTFSC ADCON0, 0x1
 07AD  2FAF     GOTO 0x7AF
 07AE  2FB0     GOTO 0x7B0
 07AF  2FAC     GOTO 0x7AC
 07B0  2FB1     GOTO 0x7B1
-95:                    adc_ch2_val_msb = ADRESH;
+98:                    adc_ch2_val_msb = ADRESH;
 07B1  081C     MOVF ADRESH, W
 07B2  0020     MOVLB 0x0
 07B3  00A0     MOVWF __pcstackBANK0
 07B4  0820     MOVF __pcstackBANK0, W
 07B5  00A8     MOVWF adc_ch2_val_msb
-96:                    adc_ch2_val_lsb = ADRESL;
+99:                    adc_ch2_val_lsb = ADRESL;
 07B6  0021     MOVLB 0x1
 07B7  081B     MOVF ADRES, W
 07B8  0020     MOVLB 0x0
 07B9  00A0     MOVWF __pcstackBANK0
 07BA  0820     MOVF __pcstackBANK0, W
 07BB  00A7     MOVWF adc_ch2_val_lsb
-97:                    
-98:                    /* temp sensor don't work
-99:                    ADCON0bits.CHS = 0x1F; // 1F is FVR buffer output
-100:                   delay(1); // 1mS
-101:                   ADCON0bits.ADGO = 1; // starts conversion
-102:                   while (ADCON0bits.ADGO == 1) {} // wait for conversion to complete
-103:                   adc_temp_val_msb = ADRESH;
-104:                   adc_temp_val_lsb = ADRESL;
-105:                   */
-106:                   
-107:                   UART_send_char('@'); // start of message
+100:                   
+101:                   /* temp sensor don't work
+102:                   ADCON0bits.CHS = 0x1F; // 1F is FVR buffer output
+103:                   delay(1); // 1mS
+104:                   ADCON0bits.ADGO = 1; // starts conversion
+105:                   while (ADCON0bits.ADGO == 1) {} // wait for conversion to complete
+106:                   adc_temp_val_msb = ADRESH;
+107:                   adc_temp_val_lsb = ADRESL;
+108:                   */
+109:                   
+110:                   UART_send_char('@'); // start of message
 07BC  3040     MOVLW 0x40
 07BD  3186     MOVLP 0x6
-07BE  2627     CALL 0x627
+07BE  2623     CALL 0x623
 07BF  3187     MOVLP 0x7
-108:                   /*UART_send_nah(adc_ch1_val_msb);
-109:                   UART_send_2nah(adc_ch1_val_lsb);
-110:                   UART_send_char(' '); // space for easier debug read
-111:                   UART_send_nah(adc_ch2_val_msb);
-112:                   UART_send_2nah(adc_ch2_val_lsb);
-113:                   */
-114:                   UART_send_char(' '); // space for easier debug read
+111:                   /*UART_send_nah(adc_ch1_val_msb);
+112:                   UART_send_2nah(adc_ch1_val_lsb);
+113:                   UART_send_char(' '); // space for easier debug read
+114:                   UART_send_nah(adc_ch2_val_msb);
+115:                   UART_send_2nah(adc_ch2_val_lsb);
+116:                   */
+117:                   UART_send_char(' '); // space for easier debug read
 07C0  3020     MOVLW 0x20
 07C1  3186     MOVLP 0x6
-07C2  2627     CALL 0x627
+07C2  2623     CALL 0x623
 07C3  3187     MOVLP 0x7
-115:                   UART_send_uint16_4dec(adc_ch1_val_msb * 256 + adc_ch1_val_lsb); // is in 1mV step
+118:                   UART_send_uint16_4dec(adc_ch1_val_msb * 256 + adc_ch1_val_lsb); // is in 1mV step
 07C4  087C     MOVF adc_ch1_val_lsb, W
 07C5  0020     MOVLB 0x0
 07C6  00A0     MOVWF __pcstackBANK0
@@ -270,251 +277,251 @@ G:/_githubClones/waterPressureADC2UART/ADC2UART.X/dist/default/production/ADC2UA
 07D2  3D23     ADDWFC 0x23, W
 07D3  00F9     MOVWF 0x79
 07D4  3186     MOVLP 0x6
-07D5  26CB     CALL 0x6CB
+07D5  26C7     CALL 0x6C7
 07D6  3187     MOVLP 0x7
-116:                   UART_send_char(' '); // space for easier debug read
+119:                   UART_send_char(' '); // space for easier debug read
 07D7  3020     MOVLW 0x20
 07D8  3186     MOVLP 0x6
-07D9  2627     CALL 0x627
+07D9  2623     CALL 0x623
 07DA  3187     MOVLP 0x7
-117:                   UART_send_uint16_4dec((adc_ch2_val_msb * 256 + adc_ch2_val_lsb)*2); // *2 as each value represents 2mV
+120:                   UART_send_uint16_4dec((adc_ch2_val_msb * 256 + adc_ch2_val_lsb)*2); // *2 as each value represents 2mV
 07DB  0020     MOVLB 0x0
 07DC  3527     LSLF adc_ch2_val_lsb, W
 07DD  00F8     MOVWF val
 07DE  0D28     RLF adc_ch2_val_msb, W
 07DF  00F9     MOVWF 0x79
 07E0  3186     MOVLP 0x6
-07E1  26CB     CALL 0x6CB
+07E1  26C7     CALL 0x6C7
 07E2  3187     MOVLP 0x7
-118:                   /* temp sensor don't work
-119:                   UART_send_char(' '); // space for easier debug read
-120:                   UART_send_nah(adc_temp_val_msb);
-121:                   UART_send_2nah(adc_temp_val_lsb);
-122:                    */
-123:                   
-124:                   UART_send_char(0x0D); // end of message
+121:                   /* temp sensor don't work
+122:                   UART_send_char(' '); // space for easier debug read
+123:                   UART_send_nah(adc_temp_val_msb);
+124:                   UART_send_2nah(adc_temp_val_lsb);
+125:                    */
+126:                   
+127:                   UART_send_char(0x0D); // end of message
 07E3  300D     MOVLW 0xD
 07E4  3186     MOVLP 0x6
-07E5  2627     CALL 0x627
+07E5  2623     CALL 0x623
 07E6  3187     MOVLP 0x7
-125:                   UART_send_char(0x0A); // end of message
+128:                   UART_send_char(0x0A); // end of message
 07E7  300A     MOVLW 0xA
 07E8  3186     MOVLP 0x6
-07E9  2627     CALL 0x627
+07E9  2623     CALL 0x623
 07EA  3187     MOVLP 0x7
-126:                   
-127:                   delay(1000);
+129:                   
+130:                   delay(1000);
 07EB  30E8     MOVLW 0xE8
 07EC  00F0     MOVWF __pcstackCOMMON
 07ED  3003     MOVLW 0x3
 07EE  00F1     MOVWF 0x71
 07EF  3186     MOVLP 0x6
-07F0  2634     CALL 0x634
+07F0  2630     CALL 0x630
 07F1  3187     MOVLP 0x7
 07F2  2F74     GOTO 0x774
-128:                   
-129:               }
+131:                   
+132:               }
 07F3  2F74     GOTO 0x774
-130:           }
+133:           }
 07F4  3180     MOVLP 0x0
 07F5  2802     GOTO 0x2
-131:           
-132:           void delay(uint16_t ms) {
-133:               
-134:               while (ms != 0) {
-0634  2E45     GOTO 0x645
-135:                   INTCONbits.TMR0IF = 0;
-0635  110B     BCF INTCON, 0x2
-136:                   TMR0 = 0x05; // gives 1mS at 8 prescaler @ fosc 8MHz
-0636  3005     MOVLW 0x5
-0637  0020     MOVLB 0x0
-0638  0095     MOVWF TMR0
-137:                   asm("NOP");
-0639  0000     NOP
-138:                   while (INTCONbits.TMR0IF == 0) {}
-063A  2E3B     GOTO 0x63B
-063B  1D0B     BTFSS INTCON, 0x2
-063C  2E3E     GOTO 0x63E
-063D  2E3F     GOTO 0x63F
-063E  2E3B     GOTO 0x63B
-063F  2E40     GOTO 0x640
-139:                   ms--;
-0640  3001     MOVLW 0x1
-0641  02F0     SUBWF __pcstackCOMMON, F
-0642  3000     MOVLW 0x0
-0643  3BF1     SUBWFB 0x71, F
-0644  2E45     GOTO 0x645
-140:               }
-0645  0870     MOVF __pcstackCOMMON, W
-0646  0471     IORWF 0x71, W
-0647  1D03     BTFSS STATUS, 0x2
-0648  2E4A     GOTO 0x64A
-0649  2E4B     GOTO 0x64B
-064A  2E35     GOTO 0x635
-064B  2E4C     GOTO 0x64C
-141:           }
-064C  0008     RETURN
-142:           
-143:           void UART_send_char(uint8_t data) {
-0627  00F0     MOVWF __pcstackCOMMON
-144:               TXREG = data;
-0628  0870     MOVF __pcstackCOMMON, W
+134:           
+135:           void delay(uint16_t ms) {
+136:               
+137:               while (ms != 0) {
+0630  2E41     GOTO 0x641
+138:                   INTCONbits.TMR0IF = 0;
+0631  110B     BCF INTCON, 0x2
+139:                   TMR0 = 0x05; // gives 1mS at 8 prescaler @ fosc 8MHz
+0632  3005     MOVLW 0x5
+0633  0020     MOVLB 0x0
+0634  0095     MOVWF TMR0
+140:                   asm("NOP");
+0635  0000     NOP
+141:                   while (INTCONbits.TMR0IF == 0) {}
+0636  2E37     GOTO 0x637
+0637  1D0B     BTFSS INTCON, 0x2
+0638  2E3A     GOTO 0x63A
+0639  2E3B     GOTO 0x63B
+063A  2E37     GOTO 0x637
+063B  2E3C     GOTO 0x63C
+142:                   ms--;
+063C  3001     MOVLW 0x1
+063D  02F0     SUBWF __pcstackCOMMON, F
+063E  3000     MOVLW 0x0
+063F  3BF1     SUBWFB 0x71, F
+0640  2E41     GOTO 0x641
+143:               }
+0641  0870     MOVF __pcstackCOMMON, W
+0642  0471     IORWF 0x71, W
+0643  1D03     BTFSS STATUS, 0x2
+0644  2E46     GOTO 0x646
+0645  2E47     GOTO 0x647
+0646  2E31     GOTO 0x631
+0647  2E48     GOTO 0x648
+144:           }
+0648  0008     RETURN
+145:           
+146:           void UART_send_char(uint8_t data) {
+0623  00F0     MOVWF __pcstackCOMMON
+147:               TXREG = data;
+0624  0870     MOVF __pcstackCOMMON, W
+0625  0023     MOVLB 0x3
+0626  009A     MOVWF TXREG
+148:               asm("NOP");
+0627  0000     NOP
+149:               while (TXSTAbits.TRMT == 0) { };
+0628  2E29     GOTO 0x629
 0629  0023     MOVLB 0x3
-062A  009A     MOVWF TXREG
-145:               asm("NOP");
-062B  0000     NOP
-146:               while (TXSTAbits.TRMT == 0) { };
-062C  2E2D     GOTO 0x62D
-062D  0023     MOVLB 0x3
-062E  1C9E     BTFSS TXSTA, 0x1
-062F  2E31     GOTO 0x631
-0630  2E32     GOTO 0x632
-0631  2E2D     GOTO 0x62D
-0632  2E33     GOTO 0x633
-147:           }
-0633  0008     RETURN
-148:           
-149:           void UART_send_nah(uint8_t nibble) {
-150:               nibble &= 0x0F;
-151:               if (nibble < 10) UART_send_char(nibble + 0x30);
-152:               else UART_send_char(nibble + 0x37);
-153:           }
-154:           
-155:           void UART_send_2nah(uint8_t byte) { // sends as 2 nibble ASCII HEX
-156:               
-157:               // send_nah:s have nibble &= 0x0F; internally
-158:               UART_send_nah(byte >> 4);
-159:               UART_send_nah(byte);
-160:           }
-161:           
-162:           void UART_send_uint16_4dec(uint16_t val) {
-163:               uint8_t toSend = val / 1000;
-06CB  30E8     MOVLW 0xE8
-06CC  00F0     MOVWF 0x1F0
-06CD  3003     MOVLW 0x3
-06CE  00F1     MOVWF 0x1F1
-06CF  0879     MOVF 0x1F9, W
-06D0  00F3     MOVWF 0x1F3
-06D1  0878     MOVF 0x1F8, W
-06D2  00F2     MOVWF 0x1F2
-06D3  3186     MOVLP 0x6
-06D4  2688     CALL 0x688
-06D5  3186     MOVLP 0x6
-06D6  0870     MOVF 0x1F0, W
-06D7  00FA     MOVWF 0x1FA
-06D8  087A     MOVF 0x1FA, W
-06D9  00FB     MOVWF 0x1FB
-164:               val = val % 1000;
-06DA  30E8     MOVLW 0xE8
-06DB  00F0     MOVWF 0x1F0
-06DC  3003     MOVLW 0x3
-06DD  00F1     MOVWF 0x1F1
-06DE  0879     MOVF 0x1F9, W
-06DF  00F3     MOVWF 0x1F3
-06E0  0878     MOVF 0x1F8, W
-06E1  00F2     MOVWF 0x1F2
-06E2  3186     MOVLP 0x6
-06E3  264D     CALL 0x64D
-06E4  3186     MOVLP 0x6
-06E5  0871     MOVF 0x1F1, W
-06E6  00F9     MOVWF 0x1F9
-06E7  0870     MOVF 0x1F0, W
-06E8  00F8     MOVWF 0x1F8
-165:               UART_send_char(toSend + 0x30);
-06E9  087B     MOVF 0x1FB, W
-06EA  3E30     ADDLW 0x30
-06EB  3186     MOVLP 0x6
-06EC  2627     CALL 0x627
-06ED  3186     MOVLP 0x6
-166:               toSend = val / 100;
-06EE  3064     MOVLW 0x64
-06EF  00F0     MOVWF 0x1F0
-06F0  3000     MOVLW 0x0
-06F1  00F1     MOVWF 0x1F1
-06F2  0879     MOVF 0x1F9, W
-06F3  00F3     MOVWF 0x1F3
-06F4  0878     MOVF 0x1F8, W
-06F5  00F2     MOVWF 0x1F2
-06F6  3186     MOVLP 0x6
-06F7  2688     CALL 0x688
-06F8  3186     MOVLP 0x6
-06F9  0870     MOVF 0x1F0, W
-06FA  00FA     MOVWF 0x1FA
-06FB  087A     MOVF 0x1FA, W
-06FC  00FB     MOVWF 0x1FB
-167:               val = val % 100;
-06FD  3064     MOVLW 0x64
-06FE  00F0     MOVWF 0x1F0
-06FF  3000     MOVLW 0x0
-0700  00F1     MOVWF 0x1F1
-0701  0879     MOVF 0x1F9, W
-0702  00F3     MOVWF 0x1F3
-0703  0878     MOVF 0x1F8, W
-0704  00F2     MOVWF 0x1F2
-0705  3186     MOVLP 0x6
-0706  264D     CALL 0x64D
-0707  3186     MOVLP 0x6
-0708  0871     MOVF 0x1F1, W
-0709  00F9     MOVWF 0x1F9
-070A  0870     MOVF 0x1F0, W
-070B  00F8     MOVWF 0x1F8
+062A  1C9E     BTFSS TXSTA, 0x1
+062B  2E2D     GOTO 0x62D
+062C  2E2E     GOTO 0x62E
+062D  2E29     GOTO 0x629
+062E  2E2F     GOTO 0x62F
+150:           }
+062F  0008     RETURN
+151:           
+152:           void UART_send_nah(uint8_t nibble) {
+153:               nibble &= 0x0F;
+154:               if (nibble < 10) UART_send_char(nibble + 0x30);
+155:               else UART_send_char(nibble + 0x37);
+156:           }
+157:           
+158:           void UART_send_2nah(uint8_t byte) { // sends as 2 nibble ASCII HEX
+159:               
+160:               // send_nah:s have nibble &= 0x0F; internally
+161:               UART_send_nah(byte >> 4);
+162:               UART_send_nah(byte);
+163:           }
+164:           
+165:           void UART_send_uint16_4dec(uint16_t val) {
+166:               uint8_t toSend = val / 1000;
+06C7  30E8     MOVLW 0xE8
+06C8  00F0     MOVWF 0x1F0
+06C9  3003     MOVLW 0x3
+06CA  00F1     MOVWF 0x1F1
+06CB  0879     MOVF 0x1F9, W
+06CC  00F3     MOVWF 0x1F3
+06CD  0878     MOVF 0x1F8, W
+06CE  00F2     MOVWF 0x1F2
+06CF  3186     MOVLP 0x6
+06D0  2684     CALL 0x684
+06D1  3186     MOVLP 0x6
+06D2  0870     MOVF 0x1F0, W
+06D3  00FA     MOVWF 0x1FA
+06D4  087A     MOVF 0x1FA, W
+06D5  00FB     MOVWF 0x1FB
+167:               val = val % 1000;
+06D6  30E8     MOVLW 0xE8
+06D7  00F0     MOVWF 0x1F0
+06D8  3003     MOVLW 0x3
+06D9  00F1     MOVWF 0x1F1
+06DA  0879     MOVF 0x1F9, W
+06DB  00F3     MOVWF 0x1F3
+06DC  0878     MOVF 0x1F8, W
+06DD  00F2     MOVWF 0x1F2
+06DE  3186     MOVLP 0x6
+06DF  2649     CALL 0x649
+06E0  3186     MOVLP 0x6
+06E1  0871     MOVF 0x1F1, W
+06E2  00F9     MOVWF 0x1F9
+06E3  0870     MOVF 0x1F0, W
+06E4  00F8     MOVWF 0x1F8
 168:               UART_send_char(toSend + 0x30);
-070C  087B     MOVF 0x1FB, W
-070D  3E30     ADDLW 0x30
-070E  3186     MOVLP 0x6
-070F  2627     CALL 0x627
-0710  3186     MOVLP 0x6
-169:               toSend = val / 10;
-0711  300A     MOVLW 0xA
-0712  00F0     MOVWF 0x1F0
-0713  3000     MOVLW 0x0
-0714  00F1     MOVWF 0x1F1
-0715  0879     MOVF 0x1F9, W
-0716  00F3     MOVWF 0x1F3
-0717  0878     MOVF 0x1F8, W
-0718  00F2     MOVWF 0x1F2
-0719  3186     MOVLP 0x6
-071A  2688     CALL 0x688
-071B  3186     MOVLP 0x6
-071C  0870     MOVF 0x1F0, W
-071D  00FA     MOVWF 0x1FA
-071E  087A     MOVF 0x1FA, W
-071F  00FB     MOVWF 0x1FB
-170:               val = val % 10;
-0720  300A     MOVLW 0xA
-0721  00F0     MOVWF 0x1F0
-0722  3000     MOVLW 0x0
-0723  00F1     MOVWF 0x1F1
-0724  0879     MOVF 0x1F9, W
-0725  00F3     MOVWF 0x1F3
-0726  0878     MOVF 0x1F8, W
-0727  00F2     MOVWF 0x1F2
-0728  3186     MOVLP 0x6
-0729  264D     CALL 0x64D
-072A  3186     MOVLP 0x6
-072B  0871     MOVF 0x1F1, W
-072C  00F9     MOVWF 0x1F9
-072D  0870     MOVF 0x1F0, W
-072E  00F8     MOVWF 0x1F8
+06E5  087B     MOVF 0x1FB, W
+06E6  3E30     ADDLW 0x30
+06E7  3186     MOVLP 0x6
+06E8  2623     CALL 0x623
+06E9  3186     MOVLP 0x6
+169:               toSend = val / 100;
+06EA  3064     MOVLW 0x64
+06EB  00F0     MOVWF 0x1F0
+06EC  3000     MOVLW 0x0
+06ED  00F1     MOVWF 0x1F1
+06EE  0879     MOVF 0x1F9, W
+06EF  00F3     MOVWF 0x1F3
+06F0  0878     MOVF 0x1F8, W
+06F1  00F2     MOVWF 0x1F2
+06F2  3186     MOVLP 0x6
+06F3  2684     CALL 0x684
+06F4  3186     MOVLP 0x6
+06F5  0870     MOVF 0x1F0, W
+06F6  00FA     MOVWF 0x1FA
+06F7  087A     MOVF 0x1FA, W
+06F8  00FB     MOVWF 0x1FB
+170:               val = val % 100;
+06F9  3064     MOVLW 0x64
+06FA  00F0     MOVWF 0x1F0
+06FB  3000     MOVLW 0x0
+06FC  00F1     MOVWF 0x1F1
+06FD  0879     MOVF 0x1F9, W
+06FE  00F3     MOVWF 0x1F3
+06FF  0878     MOVF 0x1F8, W
+0700  00F2     MOVWF 0x1F2
+0701  3186     MOVLP 0x6
+0702  2649     CALL 0x649
+0703  3186     MOVLP 0x6
+0704  0871     MOVF 0x1F1, W
+0705  00F9     MOVWF 0x1F9
+0706  0870     MOVF 0x1F0, W
+0707  00F8     MOVWF 0x1F8
 171:               UART_send_char(toSend + 0x30);
-072F  087B     MOVF 0x1FB, W
-0730  3E30     ADDLW 0x30
-0731  3186     MOVLP 0x6
-0732  2627     CALL 0x627
-0733  3186     MOVLP 0x6
-172:               toSend = val;
-0734  0878     MOVF 0x1F8, W
-0735  00FA     MOVWF 0x1FA
-0736  087A     MOVF 0x1FA, W
-0737  00FB     MOVWF 0x1FB
-173:               UART_send_char(toSend + 0x30);
-0738  087B     MOVF 0x1FB, W
-0739  3E30     ADDLW 0x30
-073A  3186     MOVLP 0x6
-073B  2627     CALL 0x627
-073C  3186     MOVLP 0x6
-174:           }
-073D  0008     RETURN
+0708  087B     MOVF 0x1FB, W
+0709  3E30     ADDLW 0x30
+070A  3186     MOVLP 0x6
+070B  2623     CALL 0x623
+070C  3186     MOVLP 0x6
+172:               toSend = val / 10;
+070D  300A     MOVLW 0xA
+070E  00F0     MOVWF 0x1F0
+070F  3000     MOVLW 0x0
+0710  00F1     MOVWF 0x1F1
+0711  0879     MOVF 0x1F9, W
+0712  00F3     MOVWF 0x1F3
+0713  0878     MOVF 0x1F8, W
+0714  00F2     MOVWF 0x1F2
+0715  3186     MOVLP 0x6
+0716  2684     CALL 0x684
+0717  3186     MOVLP 0x6
+0718  0870     MOVF 0x1F0, W
+0719  00FA     MOVWF 0x1FA
+071A  087A     MOVF 0x1FA, W
+071B  00FB     MOVWF 0x1FB
+173:               val = val % 10;
+071C  300A     MOVLW 0xA
+071D  00F0     MOVWF 0x1F0
+071E  3000     MOVLW 0x0
+071F  00F1     MOVWF 0x1F1
+0720  0879     MOVF 0x1F9, W
+0721  00F3     MOVWF 0x1F3
+0722  0878     MOVF 0x1F8, W
+0723  00F2     MOVWF 0x1F2
+0724  3186     MOVLP 0x6
+0725  2649     CALL 0x649
+0726  3186     MOVLP 0x6
+0727  0871     MOVF 0x1F1, W
+0728  00F9     MOVWF 0x1F9
+0729  0870     MOVF 0x1F0, W
+072A  00F8     MOVWF 0x1F8
+174:               UART_send_char(toSend + 0x30);
+072B  087B     MOVF 0x1FB, W
+072C  3E30     ADDLW 0x30
+072D  3186     MOVLP 0x6
+072E  2623     CALL 0x623
+072F  3186     MOVLP 0x6
+175:               toSend = val;
+0730  0878     MOVF 0x1F8, W
+0731  00FA     MOVWF 0x1FA
+0732  087A     MOVF 0x1FA, W
+0733  00FB     MOVWF 0x1FB
+176:               UART_send_char(toSend + 0x30);
+0734  087B     MOVF 0x1FB, W
+0735  3E30     ADDLW 0x30
+0736  3186     MOVLP 0x6
+0737  2623     CALL 0x623
+0738  3186     MOVLP 0x6
+177:           }
+0739  0008     RETURN
 ---  C:/Program Files (x86)/Microchip/xc8/v2.00/pic/sources/c99/common/lwmod.c  -------------------------
 1:             // word unsigned modulus
 2:             
@@ -528,78 +535,78 @@ G:/_githubClones/waterPressureADC2UART/ADC2UART.X/dist/default/production/ADC2UA
 10:            	unsigned char	counter;
 11:            
 12:            	if(divisor != 0) {
-064D  0870     MOVF 0x1F0, W
-064E  0471     IORWF 0x1F1, W
-064F  1903     BTFSC 0x183, 0x2
-0650  2E52     GOTO 0x652
-0651  2E53     GOTO 0x653
-0652  2E82     GOTO 0x682
+0649  0870     MOVF 0x1F0, W
+064A  0471     IORWF 0x1F1, W
+064B  1903     BTFSC 0x183, 0x2
+064C  2E4E     GOTO 0x64E
+064D  2E4F     GOTO 0x64F
+064E  2E7E     GOTO 0x67E
 13:            		counter = 1;
-0653  01F5     CLRF 0x1F5
-0654  0AF5     INCF 0x1F5, F
+064F  01F5     CLRF 0x1F5
+0650  0AF5     INCF 0x1F5, F
 14:            		while((divisor & 0x8000) == 0) {
-0655  2E60     GOTO 0x660
+0651  2E5C     GOTO 0x65C
 15:            			divisor <<= 1;
-0656  3001     MOVLW 0x1
-0657  35F0     LSLF 0x1F0, F
-0658  0DF1     RLF 0x1F1, F
-0659  0B89     DECFSZ 0x189, F
-065A  2E57     GOTO 0x657
+0652  3001     MOVLW 0x1
+0653  35F0     LSLF 0x1F0, F
+0654  0DF1     RLF 0x1F1, F
+0655  0B89     DECFSZ 0x189, F
+0656  2E53     GOTO 0x653
 16:            			counter++;
-065B  3001     MOVLW 0x1
-065C  00F4     MOVWF 0x1F4
-065D  0874     MOVF 0x1F4, W
-065E  07F5     ADDWF 0x1F5, F
-065F  2E60     GOTO 0x660
+0657  3001     MOVLW 0x1
+0658  00F4     MOVWF 0x1F4
+0659  0874     MOVF 0x1F4, W
+065A  07F5     ADDWF 0x1F5, F
+065B  2E5C     GOTO 0x65C
 17:            		}
-0660  1FF1     BTFSS 0x1F1, 0x7
-0661  2E63     GOTO 0x663
-0662  2E64     GOTO 0x664
-0663  2E56     GOTO 0x656
-0664  2E66     GOTO 0x666
-0665  2E66     GOTO 0x666
+065C  1FF1     BTFSS 0x1F1, 0x7
+065D  2E5F     GOTO 0x65F
+065E  2E60     GOTO 0x660
+065F  2E52     GOTO 0x652
+0660  2E62     GOTO 0x662
+0661  2E62     GOTO 0x662
 18:            		do {
 19:            			if(divisor <= dividend)
-0666  0871     MOVF 0x1F1, W
-0667  0273     SUBWF 0x1F3, W
-0668  1D03     BTFSS 0x183, 0x2
-0669  2E6C     GOTO 0x66C
-066A  0870     MOVF 0x1F0, W
-066B  0272     SUBWF 0x1F2, W
-066C  1C03     BTFSS 0x183, 0x0
-066D  2E6F     GOTO 0x66F
-066E  2E70     GOTO 0x670
-066F  2E75     GOTO 0x675
+0662  0871     MOVF 0x1F1, W
+0663  0273     SUBWF 0x1F3, W
+0664  1D03     BTFSS 0x183, 0x2
+0665  2E68     GOTO 0x668
+0666  0870     MOVF 0x1F0, W
+0667  0272     SUBWF 0x1F2, W
+0668  1C03     BTFSS 0x183, 0x0
+0669  2E6B     GOTO 0x66B
+066A  2E6C     GOTO 0x66C
+066B  2E71     GOTO 0x671
 20:            				dividend -= divisor;
-0670  0870     MOVF 0x1F0, W
-0671  02F2     SUBWF 0x1F2, F
-0672  0871     MOVF 0x1F1, W
-0673  3BF3     SUBWFB 0x1F3, F
-0674  2E75     GOTO 0x675
+066C  0870     MOVF 0x1F0, W
+066D  02F2     SUBWF 0x1F2, F
+066E  0871     MOVF 0x1F1, W
+066F  3BF3     SUBWFB 0x1F3, F
+0670  2E71     GOTO 0x671
 21:            			divisor >>= 1;
-0675  3001     MOVLW 0x1
-0676  36F1     LSRF 0x1F1, F
-0677  0CF0     RRF 0x1F0, F
-0678  0B89     DECFSZ 0x189, F
-0679  2E76     GOTO 0x676
+0671  3001     MOVLW 0x1
+0672  36F1     LSRF 0x1F1, F
+0673  0CF0     RRF 0x1F0, F
+0674  0B89     DECFSZ 0x189, F
+0675  2E72     GOTO 0x672
 22:            		} while(--counter != 0);
-067A  3001     MOVLW 0x1
-067B  02F5     SUBWF 0x1F5, F
-067C  1D03     BTFSS 0x183, 0x2
-067D  2E7F     GOTO 0x67F
-067E  2E80     GOTO 0x680
-067F  2E66     GOTO 0x666
-0680  2E82     GOTO 0x682
-0681  2E82     GOTO 0x682
+0676  3001     MOVLW 0x1
+0677  02F5     SUBWF 0x1F5, F
+0678  1D03     BTFSS 0x183, 0x2
+0679  2E7B     GOTO 0x67B
+067A  2E7C     GOTO 0x67C
+067B  2E62     GOTO 0x662
+067C  2E7E     GOTO 0x67E
+067D  2E7E     GOTO 0x67E
 23:            	}
 24:            	return dividend;
-0682  0873     MOVF 0x1F3, W
-0683  00F1     MOVWF 0x1F1
-0684  0872     MOVF 0x1F2, W
-0685  00F0     MOVWF 0x1F0
-0686  2E87     GOTO 0x687
+067E  0873     MOVF 0x1F3, W
+067F  00F1     MOVWF 0x1F1
+0680  0872     MOVF 0x1F2, W
+0681  00F0     MOVWF 0x1F0
+0682  2E83     GOTO 0x683
 25:            }
-0687  0008     RETURN
+0683  0008     RETURN
 ---  C:/Program Files (x86)/Microchip/xc8/v2.00/pic/sources/c99/common/lwdiv.c  -------------------------
 1:             // word unsigned division
 2:             
@@ -614,87 +621,87 @@ G:/_githubClones/waterPressureADC2UART/ADC2UART.X/dist/default/production/ADC2UA
 11:            	unsigned char	counter;
 12:            
 13:            	quotient = 0;
-0688  01F5     CLRF 0x1F5
-0689  01F6     CLRF 0x1F6
+0684  01F5     CLRF 0x1F5
+0685  01F6     CLRF 0x1F6
 14:            	if(divisor != 0) {
-068A  0870     MOVF 0x1F0, W
-068B  0471     IORWF 0x1F1, W
-068C  1903     BTFSC 0x183, 0x2
-068D  2E8F     GOTO 0x68F
-068E  2E90     GOTO 0x690
-068F  2EC5     GOTO 0x6C5
+0686  0870     MOVF 0x1F0, W
+0687  0471     IORWF 0x1F1, W
+0688  1903     BTFSC 0x183, 0x2
+0689  2E8B     GOTO 0x68B
+068A  2E8C     GOTO 0x68C
+068B  2EC1     GOTO 0x6C1
 15:            		counter = 1;
-0690  01F7     CLRF 0x1F7
-0691  0AF7     INCF 0x1F7, F
+068C  01F7     CLRF 0x1F7
+068D  0AF7     INCF 0x1F7, F
 16:            		while((divisor & 0x8000) == 0) {
-0692  2E9D     GOTO 0x69D
+068E  2E99     GOTO 0x699
 17:            			divisor <<= 1;
-0693  3001     MOVLW 0x1
-0694  35F0     LSLF 0x1F0, F
-0695  0DF1     RLF 0x1F1, F
-0696  0B89     DECFSZ 0x189, F
-0697  2E94     GOTO 0x694
+068F  3001     MOVLW 0x1
+0690  35F0     LSLF 0x1F0, F
+0691  0DF1     RLF 0x1F1, F
+0692  0B89     DECFSZ 0x189, F
+0693  2E90     GOTO 0x690
 18:            			counter++;
-0698  3001     MOVLW 0x1
-0699  00F4     MOVWF 0x1F4
-069A  0874     MOVF 0x1F4, W
-069B  07F7     ADDWF 0x1F7, F
-069C  2E9D     GOTO 0x69D
+0694  3001     MOVLW 0x1
+0695  00F4     MOVWF 0x1F4
+0696  0874     MOVF 0x1F4, W
+0697  07F7     ADDWF 0x1F7, F
+0698  2E99     GOTO 0x699
 19:            		}
-069D  1FF1     BTFSS 0x1F1, 0x7
-069E  2EA0     GOTO 0x6A0
-069F  2EA1     GOTO 0x6A1
-06A0  2E93     GOTO 0x693
-06A1  2EA3     GOTO 0x6A3
-06A2  2EA3     GOTO 0x6A3
+0699  1FF1     BTFSS 0x1F1, 0x7
+069A  2E9C     GOTO 0x69C
+069B  2E9D     GOTO 0x69D
+069C  2E8F     GOTO 0x68F
+069D  2E9F     GOTO 0x69F
+069E  2E9F     GOTO 0x69F
 20:            		do {
 21:            			quotient <<= 1;
-06A3  3001     MOVLW 0x1
-06A4  35F5     LSLF 0x1F5, F
-06A5  0DF6     RLF 0x1F6, F
-06A6  0B89     DECFSZ 0x189, F
-06A7  2EA4     GOTO 0x6A4
+069F  3001     MOVLW 0x1
+06A0  35F5     LSLF 0x1F5, F
+06A1  0DF6     RLF 0x1F6, F
+06A2  0B89     DECFSZ 0x189, F
+06A3  2EA0     GOTO 0x6A0
 22:            			if(divisor <= dividend) {
-06A8  0871     MOVF 0x1F1, W
-06A9  0273     SUBWF 0x1F3, W
-06AA  1D03     BTFSS 0x183, 0x2
-06AB  2EAE     GOTO 0x6AE
-06AC  0870     MOVF 0x1F0, W
-06AD  0272     SUBWF 0x1F2, W
-06AE  1C03     BTFSS 0x183, 0x0
-06AF  2EB1     GOTO 0x6B1
-06B0  2EB2     GOTO 0x6B2
-06B1  2EB8     GOTO 0x6B8
+06A4  0871     MOVF 0x1F1, W
+06A5  0273     SUBWF 0x1F3, W
+06A6  1D03     BTFSS 0x183, 0x2
+06A7  2EAA     GOTO 0x6AA
+06A8  0870     MOVF 0x1F0, W
+06A9  0272     SUBWF 0x1F2, W
+06AA  1C03     BTFSS 0x183, 0x0
+06AB  2EAD     GOTO 0x6AD
+06AC  2EAE     GOTO 0x6AE
+06AD  2EB4     GOTO 0x6B4
 23:            				dividend -= divisor;
-06B2  0870     MOVF 0x1F0, W
-06B3  02F2     SUBWF 0x1F2, F
-06B4  0871     MOVF 0x1F1, W
-06B5  3BF3     SUBWFB 0x1F3, F
+06AE  0870     MOVF 0x1F0, W
+06AF  02F2     SUBWF 0x1F2, F
+06B0  0871     MOVF 0x1F1, W
+06B1  3BF3     SUBWFB 0x1F3, F
 24:            				quotient |= 1;
-06B6  1475     BSF 0x1F5, 0x0
-06B7  2EB8     GOTO 0x6B8
+06B2  1475     BSF 0x1F5, 0x0
+06B3  2EB4     GOTO 0x6B4
 25:            			}
 26:            			divisor >>= 1;
-06B8  3001     MOVLW 0x1
-06B9  36F1     LSRF 0x1F1, F
-06BA  0CF0     RRF 0x1F0, F
-06BB  0B89     DECFSZ 0x189, F
-06BC  2EB9     GOTO 0x6B9
+06B4  3001     MOVLW 0x1
+06B5  36F1     LSRF 0x1F1, F
+06B6  0CF0     RRF 0x1F0, F
+06B7  0B89     DECFSZ 0x189, F
+06B8  2EB5     GOTO 0x6B5
 27:            		} while(--counter != 0);
-06BD  3001     MOVLW 0x1
-06BE  02F7     SUBWF 0x1F7, F
-06BF  1D03     BTFSS 0x183, 0x2
-06C0  2EC2     GOTO 0x6C2
-06C1  2EC3     GOTO 0x6C3
-06C2  2EA3     GOTO 0x6A3
-06C3  2EC5     GOTO 0x6C5
-06C4  2EC5     GOTO 0x6C5
+06B9  3001     MOVLW 0x1
+06BA  02F7     SUBWF 0x1F7, F
+06BB  1D03     BTFSS 0x183, 0x2
+06BC  2EBE     GOTO 0x6BE
+06BD  2EBF     GOTO 0x6BF
+06BE  2E9F     GOTO 0x69F
+06BF  2EC1     GOTO 0x6C1
+06C0  2EC1     GOTO 0x6C1
 28:            	}
 29:            	return quotient;
-06C5  0876     MOVF 0x1F6, W
-06C6  00F1     MOVWF 0x1F1
-06C7  0875     MOVF 0x1F5, W
-06C8  00F0     MOVWF 0x1F0
-06C9  2ECA     GOTO 0x6CA
+06C1  0876     MOVF 0x1F6, W
+06C2  00F1     MOVWF 0x1F1
+06C3  0875     MOVF 0x1F5, W
+06C4  00F0     MOVWF 0x1F0
+06C5  2EC6     GOTO 0x6C6
 30:            }
-06CA  0008     RETURN
+06C6  0008     RETURN

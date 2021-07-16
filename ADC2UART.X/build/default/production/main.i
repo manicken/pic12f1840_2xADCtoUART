@@ -3332,6 +3332,9 @@ void main() {
     TRISA = 0xFF;
     TRISAbits.TRISA0 = 0;
 
+    LATAbits.LATA5 = 1;
+    TRISAbits.TRISA5 = 0;
+
     TXSTA = 0x84;
     RCSTA = 0x80;
     BAUDCON = 0x00;
@@ -3374,8 +3377,11 @@ void main() {
         while (ADCON0bits.ADGO == 1) {}
         adc_ch2_val_msb = ADRESH;
         adc_ch2_val_lsb = ADRESL;
-# 107 "main.c"
+# 110 "main.c"
         UART_send_char('@');
+        UART_send_char('S');
+        UART_send_char('P');
+        UART_send_char('S');
 
 
 

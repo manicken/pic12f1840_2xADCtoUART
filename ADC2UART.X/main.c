@@ -52,6 +52,9 @@ void main() {
     TRISA = 0xFF;
     TRISAbits.TRISA0 = 0; // UART TX pin
     
+    LATAbits.LATA5 = 1; // MAX487 transmit mode
+    TRISAbits.TRISA5 = 0; // MAX487 mode pin as output
+    
     TXSTA = 0x84;
     RCSTA = 0x80;
     BAUDCON = 0x00;
@@ -105,6 +108,9 @@ void main() {
         */
         
         UART_send_char('@'); // start of message
+        UART_send_char('S'); // slave response
+        UART_send_char('P'); // unique id "Pressure"
+        UART_send_char('S'); // unique id "Sensor"
         /*UART_send_nah(adc_ch1_val_msb);
         UART_send_2nah(adc_ch1_val_lsb);
         UART_send_char(' '); // space for easier debug read
